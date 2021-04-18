@@ -46,7 +46,7 @@ plt.plot(supply(x, 0.72, 19.4), x,  label= 'Supply')
 plt.plot(demand(x, 1.8, 48.32), x,  label= 'Demand')
 plt.plot(q_eq, p_eq, 'o', markersize = 10, color='grey')
 
-plt.hlines(y=3, xmin=0, xmax=42.96, color='green')
+plt.hlines(y=3, xmin=0, xmax=42.96, color='green', label='Price Ceiling')
 plt.vlines(21.56, 0, 14.86, linestyle="dashed", color='black')
 plt.hlines(14.86, 0,  21.56, linestyle="dashed", color='black')
 
@@ -66,5 +66,5 @@ plt.title("Supply and Demand")
 plt.legend(frameon = False)
 plt.xlabel("Quantity")
 plt.ylabel("Price")
-
+plt.show()
 plt.savefig('curve.png', dpi=1200)
