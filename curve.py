@@ -9,63 +9,87 @@ import sympy as sy
 import matplotlib.pyplot as plt
 plt.style.use('ggplot')
 
-# quantity x
-x = np.linspace(0,20,100)
+class Market:
+    x = np.linspace(0,20,100)
+    
+    def __init__(self, intercept_d, slope_d, intercept_s, slope_s, price_c=None):
+        self.intercept_d = intercept_d
+        self.slope_d = slope_d
+        self.intercept_s = intercept_s
+        self.slope_s = slope_s
+        self.price_c = price_c
 
-# functions with visualization
+    def supply(self):
+        return self.intercept_s + self.slope_s * x
 
-'''
-def supply(x, slope, intercept):
-  qs = [intercept + slope * i for i in x]
-  qs = {'quantity':qs, 'price':x}
-  return qs
-
-  def demand(x, slope, intercept):
-  qd = [intercept - slope * i for i in x]
-  qd = {'quantity':qd, 'price':x}
-  return qd
-'''
-
-# functions with equations
-def supply(x, slope, intercept):
-      return intercept + slope * x
-
-def demand(x, slope, intercept):
-      return intercept - slope * x
-
-# equilibrium point
-q = sy.Symbol('q')
-eq = sy.Eq(supply(q, 0.72, 19.4), demand(q, 1.8, 48.32))
-p_eq = sy.solve(eq)[0]
-q_eq = supply(p_eq, 0.72, 19.4)
-print('\n','Price equilibrium:', p_eq, '\n',
-      'Quantity equilibrium:', q_eq)
+    def demand(self):
+        return self.intercept_d - self.slope_d * x
+    
+    def equilibrium(self):
+      '''
+      p_eq: equilibrium price
+      q_eq: equilibrium quantity
+      '''
+      q = sy.Symbol('q')
+      eq = sy.Eq(supply(q, self.slope_s, self.intercept_s), demand(q, self.slope_d, self.intercept_d))
+      p_eq = sy.solve(eq)[0]
+      q_eq = supply(p_eq, self.slope_s, self.intercept_s)
+      self.p_eq = p_eq
+      self.q_eq = q_eq
+      print('\n','Price equilibrium:', round(p_eq, 2), '\n', 
+            'Quantity equilibrium:', round(q_eq, 2))
+      return p_eq, q_eq
 
 
-# draw supply and demand curve
-plt.plot(supply(x, 0.72, 19.4), x,  label= 'Supply')
-plt.plot(demand(x, 1.8, 48.32), x,  label= 'Demand')
-plt.plot(q_eq, p_eq, 'o', markersize = 10, color='grey')
+    def new_equilibrium(self):
+        '''
+        q_celling: new equilibrium quantity
+        p_celling = new equilibrium price
+        d_point_celling = new demand required
+        '''
+        q_celling =  self.intercept_s + self.slope_s * self.price_c
+        self.q_celling = q_celling
+        p_celling =  (q_celling - self.intercept_d)/ (- self.slope_d)
+        self.p_celling = p_celling
+        d_point_celling = self.intercept_d - self.slope_d * self.price_c
+        self.d_point_celling = d_point_celling
+        print('\n','New Price equilibrium:', round(self.q_celling, 2), '\n', 
+              'New Quantity equilibrium:', round(self.p_celling, 2))
+        return  q_celling, p_celling, d_point_celling
+    
+    def plot(self, price_celling=False):
+        plt.plot(supply(x, self.slope_s, self.intercept_s), x,  label= 'Supply')
+        plt.plot(demand(x, self.slope_d, self.intercept_d), x,  label= 'Demand')
+        plt.plot(self.q_eq, self.p_eq, 'o', markersize = 10, color='grey')
 
-plt.hlines(y=3, xmin=0, xmax=42.96, color='green', label='Price Ceiling')
-plt.vlines(21.56, 0, 14.86, linestyle="dashed", color='black')
-plt.hlines(14.86, 0,  21.56, linestyle="dashed", color='black')
+        ax = plt.axes()
+        ax.annotate(f'Equilibrium at \n ({round(self.q_eq, 2)}, {round(self.p_eq, 2)})', 
+                    xy=(self.q_eq, self.p_eq), 
+                    xytext=(self.q_eq+2, self.p_eq), fontsize=7)
+        
+        if price_celling != False:
+            plt.hlines(y=self.price_c, xmin=0, xmax=self.d_point_celling, color='green', label='Price Ceiling')    
+            plt.vlines(self.d_point_celling, 0, self.price_c, linestyles='dashed', color='green')
+            plt.vlines(self.q_celling, 0, self.p_celling, linestyle="dashed", color='black')
+            plt.hlines(self.p_celling, 0,  self.q_celling, linestyle="dashed", color='black')
 
-plt.vlines(27.66, 0, 11.47 , linestyle="dashed", color='grey')
-plt.hlines(11.47, 0,  27.66, linestyle="dashed", color='grey')
+            ax.annotate(f'({round(self.q_celling, 2)}, {round(self.p_celling, 2)})', 
+                        xy=(self.q_celling, self.p_celling), 
+                        xytext=(self.q_celling, self.p_celling+1), fontsize=7)
+            
+            ax.annotate(f'({round(self.d_point_celling, 2)}, {round(self.price_c, 2)})', 
+                        xy=(self.d_point_celling, self.price_c), 
+                        xytext=(self.d_point_celling-1, self.price_c+1), fontsize=7)
 
-plt.vlines(42.96, 0, 3, linestyles='dashed', color='green')
-plt.margins(x=0, y=0)
+            
 
-ax = plt.axes()
-ax.annotate(f'Equilibrium at \n ({round(q_eq, 2)}, {round(p_eq, 2)})', xy=(q_eq, p_eq), xytext=(q_eq+2, p_eq))
-ax.annotate('A', xy=(10, 7.5), xytext=(10, 7.5), size=13)
-ax.annotate('B', xy=(23, 12.5), xytext=(23, 12.5), size=13)
-ax.annotate('C', xy=(23, 8.5), xytext=(23, 8.5), size=13)
+        plt.vlines(self.q_eq, 0, self.p_eq, linestyle="dashed", color='grey')
+        plt.hlines(self.p_eq, 0, self.q_eq, linestyle="dashed", color='grey')
 
-plt.title("Supply and Demand")
-plt.legend(frameon = False)
-plt.xlabel("Quantity")
-plt.ylabel("Price")
-plt.savefig('curve.png', dpi=1200)
-plt.show()
+        plt.margins(x=0, y=0)
+        plt.title("Supply and Demand")
+        plt.legend(frameon = False, loc=1)
+        plt.xlabel("Quantity")
+        plt.ylabel("Price")
+        p = plt.plot()
+        return p
