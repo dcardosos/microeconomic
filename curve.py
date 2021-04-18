@@ -1,7 +1,7 @@
 # install section
-pip install numpy
-pip install sympy
-pip intall matplotlib
+#pip install numpy
+#pip install sympy
+#pip intall matplotlib
 
 # library
 import numpy as np
@@ -47,8 +47,8 @@ plt.plot(demand(x, 1.8, 48.32), x,  label= 'Demand')
 plt.plot(q_eq, p_eq, 'o', markersize = 10, color='grey')
 
 plt.hlines(y=3, xmin=0, xmax=42.96, color='green')
-plt.vlines(21.56, 0, 14.86, linestyle="dashed")
-plt.hlines(14.86, 0,  21.56, linestyle="dashed")
+plt.vlines(21.56, 0, 14.86, linestyle="dashed", color='black')
+plt.hlines(14.86, 0,  21.56, linestyle="dashed", color='black')
 
 plt.vlines(27.66, 0, 11.47 , linestyle="dashed", color='grey')
 plt.hlines(11.47, 0,  27.66, linestyle="dashed", color='grey')
