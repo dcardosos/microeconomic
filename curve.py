@@ -53,7 +53,7 @@ plt.hlines(14.86, 0,  21.56, linestyle="dashed")
 plt.vlines(27.66, 0, 11.47 , linestyle="dashed", color='grey')
 plt.hlines(11.47, 0,  27.66, linestyle="dashed", color='grey')
 
-plt.vlines(42.96, 0, 3, linestyles='dashed')
+plt.vlines(42.96, 0, 3, linestyles='dashed', color='green')
 plt.margins(x=0, y=0)
 
 ax = plt.axes()
