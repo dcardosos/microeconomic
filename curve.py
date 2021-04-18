@@ -13,6 +13,7 @@ plt.style.use('ggplot')
 x = np.linspace(0,20,100)
 
 # functions with visualization
+
 '''
 def supply(x, slope, intercept):
   qs = [intercept + slope * i for i in x]
@@ -27,10 +28,10 @@ def supply(x, slope, intercept):
 
 # functions with equations
 def supply(x, slope, intercept):
-  return intercept + slope * x
+      return intercept + slope * x
 
 def demand(x, slope, intercept):
-  return intercept - slope * x
+      return intercept - slope * x
 
 # equilibrium point
 q = sy.Symbol('q')
@@ -66,5 +67,5 @@ plt.title("Supply and Demand")
 plt.legend(frameon = False)
 plt.xlabel("Quantity")
 plt.ylabel("Price")
-plt.show()
 plt.savefig('curve.png', dpi=1200)
+plt.show()
