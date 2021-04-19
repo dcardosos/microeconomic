@@ -19,21 +19,25 @@ class Market:
         self.slope_s = slope_s
         self.price_c = price_c
 
-    def supply(self):
-        return self.intercept_s + self.slope_s * x
+    def supply(self, price=None):
+      if price == None:
+        return self.intercept_s + self.slope_s * self.x
+      else:
+        return self.intercept_s + self.slope_s * price
 
-    def demand(self):
-        return self.intercept_d - self.slope_d * x
+    def demand(self, price=None):
+      if price == None:
+        return self.intercept_d - self.slope_d * self.x
+      else:
+        return self.intercept_d - self.slope_d * price
     
     def equilibrium(self):
       '''
       p_eq: equilibrium price
       q_eq: equilibrium quantity
       '''
-      q = sy.Symbol('q')
-      eq = sy.Eq(supply(q, self.slope_s, self.intercept_s), demand(q, self.slope_d, self.intercept_d))
-      p_eq = sy.solve(eq)[0]
-      q_eq = supply(p_eq, self.slope_s, self.intercept_s)
+      p_eq = p_eq = (self.intercept_d - self.intercept_s)/(self.slope_d + self.slope_s)
+      q_eq = self.supply(p_eq)
       self.p_eq = p_eq
       self.q_eq = q_eq
       print('\n','Price equilibrium:', round(p_eq, 2), '\n', 
@@ -41,25 +45,33 @@ class Market:
       return p_eq, q_eq
 
 
-    def new_equilibrium(self):
+    def new_equilibrium(self, var_price_celling=None):
         '''
         q_celling: new equilibrium quantity
         p_celling = new equilibrium price
         d_point_celling = new demand required
         '''
-        q_celling =  self.intercept_s + self.slope_s * self.price_c
+        if var_price_celling == None:
+          q_celling =  self.intercept_s + self.slope_s * self.price_c
+          p_celling =  (q_celling - self.intercept_d)/ (- self.slope_d)
+          d_point_celling = self.intercept_d - self.slope_d * self.price_c
+        else:
+          q_celling =  self.intercept_s + self.slope_s * var_price_celling
+          p_celling =  (q_celling - self.intercept_d)/ (- self.slope_d)
+          d_point_celling = self.intercept_d - self.slope_d * var_price_celling
+
         self.q_celling = q_celling
-        p_celling =  (q_celling - self.intercept_d)/ (- self.slope_d)
         self.p_celling = p_celling
-        d_point_celling = self.intercept_d - self.slope_d * self.price_c
         self.d_point_celling = d_point_celling
+
         print('\n','New Price equilibrium:', round(self.q_celling, 2), '\n', 
-              'New Quantity equilibrium:', round(self.p_celling, 2))
+              'New Quantity equilibrium:', round(self.p_celling, 2), '\n',
+              'New Demand Required:', round(self.d_point_celling, 2))
         return  q_celling, p_celling, d_point_celling
     
     def plot(self, price_celling=False):
-        plt.plot(supply(x, self.slope_s, self.intercept_s), x,  label= 'Supply')
-        plt.plot(demand(x, self.slope_d, self.intercept_d), x,  label= 'Demand')
+        plt.plot(self.supply(), self.x,  label= 'Supply')
+        plt.plot(self.demand(), self.x,  label= 'Demand')
         plt.plot(self.q_eq, self.p_eq, 'o', markersize = 10, color='grey')
 
         ax = plt.axes()
