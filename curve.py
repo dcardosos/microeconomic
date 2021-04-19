@@ -18,6 +18,8 @@ class Market:
         self.intercept_s = intercept_s
         self.slope_s = slope_s
         self.price_c = price_c
+        self.p_eq = None
+        self.q_eq = None
 
     def supply(self, price=None):
       if price == None:
@@ -71,17 +73,16 @@ class Market:
         return  q_ceiling, p_ceiling, d_point_ceiling
     
     def plot(self, price_ceiling=False):
-        try:
-            plt.plot(self.supply(), self.x,  label= 'Supply')
-            plt.plot(self.demand(), self.x,  label= 'Demand')
-            plt.plot(self.q_eq, self.p_eq, 'o', markersize = 10, color='grey')
+        assert self.q_eq != None, 'You didn\'t call the "equilibrium" function'
+        
+        plt.plot(self.supply(), self.x,  label= 'Supply')
+        plt.plot(self.demand(), self.x,  label= 'Demand')
+        plt.plot(self.q_eq, self.p_eq, 'o', markersize = 10, color='grey')
 
-            ax = plt.axes()
-            ax.annotate(f'Equilibrium at \n ({round(self.q_eq, 2)}, {round(self.p_eq, 2)})', 
-                        xy=(self.q_eq, self.p_eq), 
-                        xytext=(self.q_eq+2, self.p_eq), fontsize=7) 
-        except AttributeError:
-            print('You didn\'t call the "equilibrium" function')
+        ax = plt.axes()
+        ax.annotate(f'Equilibrium at \n ({round(self.q_eq, 2)}, {round(self.p_eq, 2)})', 
+                    xy=(self.q_eq, self.p_eq), 
+                    xytext=(self.q_eq+2, self.p_eq), fontsize=7) 
 
         if price_ceiling != False:
             plt.hlines(y=self.price_c, xmin=0, xmax=self.d_point_ceiling, color='green', label='Price Ceiling')    
