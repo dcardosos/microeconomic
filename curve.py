@@ -59,6 +59,7 @@ class Market:
           q_celling =  self.intercept_s + self.slope_s * var_price_celling
           p_celling =  (q_celling - self.intercept_d)/ (- self.slope_d)
           d_point_celling = self.intercept_d - self.slope_d * var_price_celling
+          self.price_c = var_price_celling
 
         self.q_celling = q_celling
         self.p_celling = p_celling
@@ -70,15 +71,18 @@ class Market:
         return  q_celling, p_celling, d_point_celling
     
     def plot(self, price_celling=False):
-        plt.plot(self.supply(), self.x,  label= 'Supply')
-        plt.plot(self.demand(), self.x,  label= 'Demand')
-        plt.plot(self.q_eq, self.p_eq, 'o', markersize = 10, color='grey')
+        try:
+            plt.plot(self.supply(), self.x,  label= 'Supply')
+            plt.plot(self.demand(), self.x,  label= 'Demand')
+            plt.plot(self.q_eq, self.p_eq, 'o', markersize = 10, color='grey')
 
-        ax = plt.axes()
-        ax.annotate(f'Equilibrium at \n ({round(self.q_eq, 2)}, {round(self.p_eq, 2)})', 
-                    xy=(self.q_eq, self.p_eq), 
-                    xytext=(self.q_eq+2, self.p_eq), fontsize=7)
-        
+            ax = plt.axes()
+            ax.annotate(f'Equilibrium at \n ({round(self.q_eq, 2)}, {round(self.p_eq, 2)})', 
+                        xy=(self.q_eq, self.p_eq), 
+                        xytext=(self.q_eq+2, self.p_eq), fontsize=7) 
+        except AttributeError:
+            print('You didn\'t call the "equilibrium" function')
+
         if price_celling != False:
             plt.hlines(y=self.price_c, xmin=0, xmax=self.d_point_celling, color='green', label='Price Ceiling')    
             plt.vlines(self.d_point_celling, 0, self.price_c, linestyles='dashed', color='green')
@@ -103,5 +107,6 @@ class Market:
         plt.legend(frameon = False, loc=1)
         plt.xlabel("Quantity")
         plt.ylabel("Price")
-        p = plt.plot()
+        plt.savefig('curve.png', dpi=1200)
+        p = plt.show(block=True)
         return p
