@@ -45,32 +45,32 @@ class Market:
       return p_eq, q_eq
 
 
-    def new_equilibrium(self, var_price_celling=None):
+    def new_equilibrium(self, var_price_ceiling=None):
         '''
-        q_celling: new equilibrium quantity
-        p_celling = new equilibrium price
-        d_point_celling = new demand required
+        q_ceiling: new equilibrium quantity
+        p_ceiling = new equilibrium price
+        d_point_ceiling = new demand required
         '''
-        if var_price_celling == None:
-          q_celling =  self.intercept_s + self.slope_s * self.price_c
-          p_celling =  (q_celling - self.intercept_d)/ (- self.slope_d)
-          d_point_celling = self.intercept_d - self.slope_d * self.price_c
+        if var_price_ceiling == None:
+          q_ceiling =  self.intercept_s + self.slope_s * self.price_c
+          p_ceiling =  (q_ceiling - self.intercept_d)/ (- self.slope_d)
+          d_point_ceiling = self.intercept_d - self.slope_d * self.price_c
         else:
-          q_celling =  self.intercept_s + self.slope_s * var_price_celling
-          p_celling =  (q_celling - self.intercept_d)/ (- self.slope_d)
-          d_point_celling = self.intercept_d - self.slope_d * var_price_celling
-          self.price_c = var_price_celling
+          q_ceiling =  self.intercept_s + self.slope_s * var_price_ceiling
+          p_ceiling =  (q_ceiling - self.intercept_d)/ (- self.slope_d)
+          d_point_ceiling = self.intercept_d - self.slope_d * var_price_ceiling
+          self.price_c = var_price_ceiling
 
-        self.q_celling = q_celling
-        self.p_celling = p_celling
-        self.d_point_celling = d_point_celling
+        self.q_ceiling = q_ceiling
+        self.p_ceiling = p_ceiling
+        self.d_point_ceiling = d_point_ceiling
 
-        print('\n','New Price equilibrium:', round(self.q_celling, 2), '\n', 
-              'New Quantity equilibrium:', round(self.p_celling, 2), '\n',
-              'New Demand Required:', round(self.d_point_celling, 2))
-        return  q_celling, p_celling, d_point_celling
+        print('\n','New Price equilibrium:', round(self.q_ceiling, 2), '\n', 
+              'New Quantity equilibrium:', round(self.p_ceiling, 2), '\n',
+              'New Demand Required:', round(self.d_point_ceiling, 2))
+        return  q_ceiling, p_ceiling, d_point_ceiling
     
-    def plot(self, price_celling=False):
+    def plot(self, price_ceiling=False):
         try:
             plt.plot(self.supply(), self.x,  label= 'Supply')
             plt.plot(self.demand(), self.x,  label= 'Demand')
@@ -83,19 +83,19 @@ class Market:
         except AttributeError:
             print('You didn\'t call the "equilibrium" function')
 
-        if price_celling != False:
-            plt.hlines(y=self.price_c, xmin=0, xmax=self.d_point_celling, color='green', label='Price Ceiling')    
-            plt.vlines(self.d_point_celling, 0, self.price_c, linestyles='dashed', color='green')
-            plt.vlines(self.q_celling, 0, self.p_celling, linestyle="dashed", color='black')
-            plt.hlines(self.p_celling, 0,  self.q_celling, linestyle="dashed", color='black')
+        if price_ceiling != False:
+            plt.hlines(y=self.price_c, xmin=0, xmax=self.d_point_ceiling, color='green', label='Price Ceiling')    
+            plt.vlines(self.d_point_ceiling, 0, self.price_c, linestyles='dashed', color='green')
+            plt.vlines(self.q_ceiling, 0, self.p_ceiling, linestyle="dashed", color='black')
+            plt.hlines(self.p_ceiling, 0,  self.q_ceiling, linestyle="dashed", color='black')
 
-            ax.annotate(f'({round(self.q_celling, 2)}, {round(self.p_celling, 2)})', 
-                        xy=(self.q_celling, self.p_celling), 
-                        xytext=(self.q_celling, self.p_celling+1), fontsize=7)
+            ax.annotate(f'({round(self.q_ceiling, 2)}, {round(self.p_ceiling, 2)})', 
+                        xy=(self.q_ceiling, self.p_ceiling), 
+                        xytext=(self.q_ceiling, self.p_ceiling+1), fontsize=7)
             
-            ax.annotate(f'({round(self.d_point_celling, 2)}, {round(self.price_c, 2)})', 
-                        xy=(self.d_point_celling, self.price_c), 
-                        xytext=(self.d_point_celling-1, self.price_c+1), fontsize=7)
+            ax.annotate(f'({round(self.d_point_ceiling, 2)}, {round(self.price_c, 2)})', 
+                        xy=(self.d_point_ceiling, self.price_c), 
+                        xytext=(self.d_point_ceiling-1, self.price_c+1), fontsize=7)
 
             
 
