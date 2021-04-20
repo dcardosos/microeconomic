@@ -72,7 +72,7 @@ class Market:
               'New Demand Required:', round(self.d_point_ceiling, 2))
         return  q_ceiling, p_ceiling, d_point_ceiling
     
-    def plot(self, price_ceiling=False):
+    def plot(self, price_ceiling=False, file_path='curve.png'):
         assert self.q_eq != None, 'You didn\'t call the "equilibrium" function'
         
         plt.plot(self.supply(), self.x,  label= 'Supply')
@@ -108,6 +108,6 @@ class Market:
         plt.legend(frameon = False, loc=1)
         plt.xlabel("Quantity")
         plt.ylabel("Price")
-        plt.savefig('curve.png', dpi=1200)
+        plt.savefig(file_path, dpi=1200)
         p = plt.show(block=True)
         return p

@@ -1,2 +1,2 @@
 # Repository for microeconomics exercise
-![Curve](curve.png)
+![Curve](class_1/curve.png)
